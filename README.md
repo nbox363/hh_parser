@@ -1,12 +1,24 @@
-# hh_parser
+# hh parser
 
-Разработать сбор данных с hh.ru по вакансиям. С помощью celery или иннова брокера. И сохранение в любую бд. 
-Данные для сбора:
-    • Ключевые навыки
-    • Наименование
-    • зарплата
-    • Описание
-    • Ссылка
+It's an app that has been created as a test-task for Консорциум "Кодекс" company
 
+# Install
+```bash
+git clone https://github.com/nbox363/hh_parser.git
+cd hh_parser
+```
+Create a virtualenv and activate it:
+```bash
+$ python3 -m venv venv
+$ . venv/bin/activate
+```
 
-    допустим сеть сбоит
+Install pip packages:
+```bash
+$ pip install -r requirements.txt
+```
+
+# Run
+```bash
+$ python main.py
+```
