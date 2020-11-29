@@ -1,5 +1,6 @@
 import requests
 import sqlite3
+from tasks import get_page, get_data
 
 
 def connect_db():
@@ -16,42 +17,15 @@ def save_in_db(*data, cur, conn):
     conn.commit()
 
 
-def get_page(page=0):
-    params = {
-        'text': 'Python Junior',
-        'area': 1,
-        'page': page,
-        'per_page': 100
-    }
-    req = requests.get('https://api.hh.ru/vacancies', params)
-    data = req.json()
-    return data
-
-
-def get_data(data):
-    key_skills = ''
-    for skill in data['key_skills']:
-        key_skills += str(skill['name'] + ', ')
-    name = data['name']
-    try:
-        salary = data['salary']['to']
-    except TypeError:
-        try:
-            salary = data['salary']['from']
-        except TypeError:
-            salary = 0
-    description = data['description']
-    url = data['area']['url']
-    return key_skills, name, salary, description, url
-
-
 def main():
     cur, conn = connect_db()
-    for page in range(3):
-        vacancies_from_page = get_page(page)
-        for vacancy in vacancies_from_page['items']:
+    for page in range(1):
+        vacancies_from_page = get_page.delay(page)
+        vacancies = vacancies_from_page.get(timeout=0)
+        for vacancy in vacancies['items']:
             row_data = requests.get(vacancy['url']).json()
-            data = get_data(row_data)
+            d = get_data.delay(row_data)
+            data = d.get(timeout=0)
             save_in_db(*data, cur=cur, conn=conn)
     conn.close()
 

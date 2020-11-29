@@ -20,5 +20,8 @@ $ pip install -r requirements.txt
 
 # Run
 ```bash
+$ docker run -d -p 5672:5672 rabbitmq
+```
+```bash
 $ python main.py
 ```
